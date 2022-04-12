@@ -1,0 +1,8 @@
+mmc dev 0
+
+fatload mmc 0:1 ${kernel_addr_r} kernel.uimg
+#fatload mmc 0:1 ${ramdisk_addr_r} initramfs.img
+
+setenv bootargs earlyprintk root=/dev/mmcblk0p5 pstorage=/dev/mmcblk0p6 dwc_otg.lpm_enable=0 elevator=deadline rootwait console=tty0 console=ttyAMA0
+
+booti ${kernel_addr_r} - ${fdt_addr}

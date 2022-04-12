@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# cleanup
+make distclean
+
+# prepare target config
+make ${UBOOT_DEVICE}
+
+# build config overrides exists ?
+[ -f "/mnt/conf/config" ] && ./scripts/kconfig/merge_config.sh .config /mnt/conf/config
+
+# run build
+make -j20
+
+# create config
+[ -f "/mnt/conf/boot.scr" ] && mkimage -A arm64 -O linux -T script -C none -n boot.scr -d /mnt/conf/boot.scr ${TARGET_DIR}/boot.scr.uimg
+
+# copy files
+cp u-boot.bin ${TARGET_DIR}/
